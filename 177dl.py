@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.8
+#!/usr/local/bin/python3.4
 # -*- coding: utf-8 -*-
 __author__ = 'wudaown'
 
@@ -11,6 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 from io import BytesIO
 import os
+from tqdm import tqdm, trange
 
 
 def getSource(url):     # 读取完整页面 返回一个漫画名称和下载地址的mapping
@@ -54,15 +55,18 @@ def getImglink(page):       # 去的图片直链
     return  imgdr
 
 
-def downloadComic(comic_link):      # 下载图片
+def downloadComic(comic_link, title):      # 下载图片
     imglist = []
     comic_page = getPageNumber(comic_link)
     for x in comic_page:
         tmp = getImglink(x)
         for y in tmp:
             imglist.append(y)
-    for z in range(len(imglist)):      # 用range是因为要重命名图片为后面打包做准备
-        print(imglist[z], "   ", z)
+
+    imgbar = trange(len(imglist))
+    imgbar.set_description(desc=title)
+    for z in imgbar:      # 用range是因为要重命名图片为后面打包做准备
+        #print(imglist[z], "   ", z)
         img = requests.get(imglist[z-1])
         if img.status_code == 200:
             with open(format(z,'03')+'.jpg', 'wb') as f: # 图片wb模式写入 binary
@@ -71,7 +75,7 @@ def downloadComic(comic_link):      # 下载图片
 
 def main(): # main 模块
     url = 'http://www.177pic.info/html/category/tt/page/'
-    end_page = 5
+    end_page = 2
     url_list = []
 
     for i in range(end_page, 1, -1):    # 根据记录选择开始页面
@@ -79,24 +83,26 @@ def main(): # main 模块
     url_list.append('http://www.177pic.info/html/category/tt')      # main page.
 
     for y in url_list:
-        print('正在下载: ',y)
+        #print('正在下载: ',y)
         comic = getSource(y)
+
         for x in comic:
-            print('正在下载: ',comic[x])
+            #print('正在下载: ', comic[x])
             if (os.path.exists(comic[x])) == True:
-                print('目录已经存在。')
+                #print('目录已经存在。')
                 os.chdir(comic[x])
-                downloadComic(x)
+                downloadComic(x, comic[x])
                 #command = 'rar a -r -s -m5 -df \''+comic[x]+'.cbr\' \''+comic[x]+'\''
                 #os.system(command)
                 #os.system('clear')
             else:
                 os.mkdir(comic[x])
                 os.chdir(comic[x])
-                downloadComic(x)
+                downloadComic(x, comic[x])
                 #command = 'rar a -r -s -m5 -df \''+comic[x]+'.cbr\' \''+comic[x]+'\''
                 #os.system(command)
                 #os.system('clear')
 
 if __name__ == '__main__':
     main()
+
