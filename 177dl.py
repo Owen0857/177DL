@@ -77,6 +77,9 @@ def main(): # main 模块
     url = 'http://www.177pic.info/html/category/tt/page/'
     end_page = 2
     url_list = []
+    
+    os.mkdir("ComicDL")
+    os.chdir("ComicDL")
 
     for i in range(end_page, 1, -1):    # 根据记录选择开始页面
         url_list.append(url+str(i))
@@ -88,20 +91,16 @@ def main(): # main 模块
 
         for x in comic:
             #print('正在下载: ', comic[x])
-            if (os.path.exists(comic[x])) == True:
-                #print('目录已经存在。')
-                os.chdir(comic[x])
-                downloadComic(x, comic[x])
-                #command = 'rar a -r -s -m5 -df \''+comic[x]+'.cbr\' \''+comic[x]+'\''
-                #os.system(command)
-                #os.system('clear')
-            else:
+            if not os.path.exists(comic[x]):
                 os.mkdir(comic[x])
-                os.chdir(comic[x])
-                downloadComic(x, comic[x])
-                #command = 'rar a -r -s -m5 -df \''+comic[x]+'.cbr\' \''+comic[x]+'\''
-                #os.system(command)
-                #os.system('clear')
+
+            os.chdir(comic[x])
+            downloadComic(x, comic[x])
+            #command = 'rar a -r -s -m5 -df \''+comic[x]+'.cbr\' \''+comic[x]+'\''
+            #os.system(command)
+            #os.system('clear')
+            
+        print('Nexe page')
 
 if __name__ == '__main__':
     main()
