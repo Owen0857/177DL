@@ -6,17 +6,13 @@
 
 ## 依赖
 
-需要
-
-python 3.8
-
-lxml 
-
-beautifulsoup
+python 3.13
 
 ``` bash
+pip install requests
 pip3 install lxml
 pip3 install beautifulsoup4
+pip install tqdm
 ```
 
 
@@ -26,9 +22,6 @@ pip3 install beautifulsoup4
 ``` bash
 python 177dl.py
 ```
-
-然后就慢慢等吧。
-
 
 
 ## Changed log

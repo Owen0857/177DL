@@ -48,7 +48,7 @@ def getImglink(page):       # 去的图片直链
     imgdr = []
     p = requests.get(page)
     imgsoup = BeautifulSoup(p.text,'lxml')
-    imglink = imgsoup.findAll('img')    # 找html中所有图片
+    imglink = imgsoup.find_all('img')    # 找html中所有图片
     for y in imglink:
         if 'data-lazy-src' in y.attrs:        # 剔除没有编号的图片
             imgdr.append(y['data-lazy-src'])
@@ -74,8 +74,8 @@ def downloadComic(comic_link, title):      # 下载图片
     os.chdir('..')
 
 def main(): # main 模块
-    url = 'http://www.177pic.info/html/category/tt/page/'
-    end_page = 2
+    url = 'https://www.177pica.com/html/category/tt/page/'
+    end_page = 5
     url_list = []
     
     os.mkdir("ComicDL")
@@ -83,7 +83,7 @@ def main(): # main 模块
 
     for i in range(end_page, 1, -1):    # 根据记录选择开始页面
         url_list.append(url+str(i))
-    url_list.append('http://www.177pic.info/html/category/tt')      # main page.
+    url_list.append('https://www.177pica.com/html/category/tt/')      # main page.
 
     for y in url_list:
         #print('正在下载: ',y)
